@@ -65,19 +65,19 @@ function updateScatterChart() {
 function updateBarChart() {
     const ctx = document.getElementById('barChart').getContext('2d');
     const { categoryData } = getCategoryData();
-    const times = categoryData.map(row => convertTimeToMinutes(row.Tempo));
-
+    const times = categoryData.map(row => Math.round(convertTimeToMinutes(row.Tempo)));
     const binSize = 5;
+
     const minTime = Math.floor(Math.min(...times) / binSize) * binSize;
     const maxTime = Math.ceil(Math.max(...times) / binSize) * binSize;
 
     const bins = Array.from(
-        { length: Math.ceil((maxTime - minTime) / binSize) },
+        { length: (maxTime - minTime) / binSize + 1 },
         (_, i) => minTime + i * binSize
     );
 
     const counts = bins.map((bin, index) =>
-        times.filter(time => 
+        times.filter(time =>
             time >= bin && time < (bins[index + 1] || maxTime + binSize)
         ).length
     );
@@ -87,7 +87,7 @@ function updateBarChart() {
     barChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: bins.map(bin => `${bin} - ${bin + binSize} min`),
+            labels: bins.map(bin => `${bin} - ${bin + binSize - 1} min`),
             datasets: [{
                 label: 'Participantes por Faixa de Tempo',
                 data: counts,
@@ -99,8 +99,8 @@ function updateBarChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: { 
-                y: { 
+            scales: {
+                y: {
                     beginAtZero: true,
                     title: {
                         display: true,
@@ -114,9 +114,6 @@ function updateBarChart() {
                     title: {
                         display: true,
                         text: 'Tempo (Minutos)'
-                    },
-                    ticks: {
-                        autoSkip: false,
                     }
                 }
             },
@@ -124,6 +121,14 @@ function updateBarChart() {
                 legend: {
                     display: true,
                     position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const label = context.dataset.label || '';
+                            return `${label}: ${context.raw} participantes`;
+                        }
+                    }
                 }
             }
         }
