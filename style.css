@@ -59,7 +59,7 @@ button:hover {
 
 #chart-container {
     width: 100%;
-    max-width: 900px; /* Aumentar o tamanho máximo para desktops */
+    max-width: 900px;
     margin-top: 20px;
     background-color: white;
     padding: 20px;
@@ -69,13 +69,12 @@ button:hover {
 
 canvas {
     width: 100% !important;
-    height: 500px !important; /* Aumentar altura para melhor visualização */
+    height: 500px !important;
 }
 
-/* Ajuste para telas menores */
 @media (max-width: 768px) {
     canvas {
-        height: 400px !important; /* Altura reduzida para telas menores */
+        height: 400px !important;
     }
 
     #chart-container {
