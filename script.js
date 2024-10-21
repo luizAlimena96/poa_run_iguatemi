@@ -1,5 +1,5 @@
 let chart;
-let allData;
+let barChart;
 
 async function fetchData() {
     try {
@@ -22,24 +22,21 @@ function calculatePace(timeInMinutes, distance) {
     return timeInMinutes / distance;
 }
 
-async function createChart() {
+async function createCharts() {
     allData = await fetchData();
-    updateChart();
+    updateScatterChart();
+    updateBarChart();
 }
 
-function updateChart() {
-    const categorySelect = document.getElementById('categorySelect');
-    const category = categorySelect.value;
-    const distance = parseFloat(categorySelect.selectedOptions[0].dataset.distance);
-    const categoryData = allData[category] || [];
+function updateScatterChart() {
+    const ctx = document.getElementById('scatterChart').getContext('2d');
+    const { categoryData, distance } = getCategoryData();
 
     const chartData = categoryData.map(row => {
-        const timeInMinutes = convertTimeToMinutes(row.Tempo);
-        const pace = calculatePace(timeInMinutes, distance);
-        return { x: timeInMinutes, y: pace, number: row.Número };
+        const time = convertTimeToMinutes(row.Tempo);
+        const pace = calculatePace(time, distance);
+        return { x: time, y: pace, number: row.Número };
     });
-
-    const ctx = document.getElementById('scatterChart').getContext('2d');
 
     if (chart) chart.destroy();
 
@@ -57,69 +54,49 @@ function updateChart() {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                x: {
-                    type: 'linear',
-                    title: { display: true, text: 'Tempo Total (Minutos)' },
-                    grid: {
-                        color: 'rgba(200, 200, 200, 0.2)',
-                        lineWidth: 1,
-                    },
-                    ticks: {
-                        stepSize: 5
-                    }
-                },
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Pace (min/km)' },
-                    grid: {
-                        color: 'rgba(200, 200, 200, 0.2)',
-                        lineWidth: 1,
-                    },
-                    ticks: {
-                        stepSize: 0.5
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `Tempo: ${context.raw.x} min, Pace: ${context.raw.y.toFixed(2)} min/km`;
-                        }
-                    }
-                }
+                x: { type: 'linear', title: { display: true, text: 'Tempo Total (Minutos)' }},
+                y: { title: { display: true, text: 'Pace (min/km)' }}
             }
         }
     });
 }
 
-function highlightParticipant() {
-    const participantNumber = parseInt(document.getElementById('participantNumber').value);
-    if (isNaN(participantNumber)) return alert("Digite um número válido!");
+function updateBarChart() {
+    const ctx = document.getElementById('barChart').getContext('2d');
+    const { categoryData } = getCategoryData();
+    const times = categoryData.map(row => convertTimeToMinutes(row.Tempo));
 
-    const dataset = chart.data.datasets[0];
-    const point = dataset.data.find(d => d.number === participantNumber);
+    const bins = Array.from({ length: 10 }, (_, i) => i * 5);
+    const counts = bins.map((bin, index) =>
+        times.filter(time => time >= bin && time < bins[index + 1]).length
+    );
 
-    if (point) {
-        const pace = point.y.toFixed(2);
-        const time = point.x.toFixed(2);
+    if (barChart) barChart.destroy();
 
-        document.getElementById('info').innerText = 
-            `Participante: ${participantNumber} | Tempo: ${time} minutos | Pace: ${pace} min/km`;
-
-        dataset.pointBackgroundColor = dataset.data.map(d =>
-            d.number === participantNumber ? 'red' : 'rgba(0, 123, 255, 0.5)'
-        );
-
-        chart.update();
-    } else {
-        document.getElementById('info').innerText = '';
-        alert("Número não encontrado!");
-    }
+    barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: bins.map(bin => `${bin} - ${bin + 5} min`),
+            datasets: [{
+                label: 'Participantes por Faixa de Tempo',
+                data: counts,
+                backgroundColor: 'rgba(0, 200, 150, 0.5)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true } }
+        }
+    });
 }
 
-createChart();
+function getCategoryData() {
+    const categorySelect = document.getElementById('categorySelect');
+    const category = categorySelect.value;
+    const distance = parseFloat(categorySelect.selectedOptions[0].dataset.distance);
+    const categoryData = allData[category] || [];
+    return { categoryData, distance };
+}
+
+createCharts();
