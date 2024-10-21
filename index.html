@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desempenho - Iguatemi Run</title>
+    <title>Desempenho - Iguatemi Day Run</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
 
 <body>
-    <h1>Curva de Dispersão - Iguatemi Day Run</h1>
+    <h1>Curva de Desempenho - Iguatemi Day Run</h1>
 
     <label for="categorySelect">Escolha uma categoria:</label>
-    <select id="categorySelect" onchange="updateChart()">
+    <select id="categorySelect" onchange="createCharts()">
         <option value="3km_geral" data-distance="3">3 km - Geral</option>
         <option value="5km_geral" data-distance="5">5 km - Geral</option>
         <option value="10km_geral" data-distance="10">10 km - Geral</option>
@@ -29,7 +29,7 @@
     <div id="chart-container">
         <canvas id="scatterChart"></canvas>
     </div>
-    
+
     <div id="chart-container">
         <canvas id="barChart"></canvas>
     </div>

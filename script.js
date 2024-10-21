@@ -100,4 +100,29 @@ function getCategoryData() {
     return { categoryData, distance };
 }
 
+function highlightParticipant() {
+    const participantNumber = parseInt(document.getElementById('participantNumber').value);
+    if (isNaN(participantNumber)) return alert("Digite um número válido!");
+
+    const dataset = chart.data.datasets[0];
+    const point = dataset.data.find(d => d.number === participantNumber);
+
+    if (point) {
+        const pace = point.y.toFixed(2);
+        const time = point.x.toFixed(2);
+
+        document.getElementById('info').innerText = 
+            `Participante: ${participantNumber} | Tempo: ${time} minutos | Pace: ${pace} min/km`;
+
+        dataset.pointBackgroundColor = dataset.data.map(d =>
+            d.number === participantNumber ? 'red' : 'rgba(0, 123, 255, 0.5)'
+        );
+
+        chart.update();
+    } else {
+        document.getElementById('info').innerText = '';
+        alert("Número não encontrado!");
+    }
+}
+
 createCharts();
