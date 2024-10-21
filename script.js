@@ -67,9 +67,20 @@ function updateBarChart() {
     const { categoryData } = getCategoryData();
     const times = categoryData.map(row => convertTimeToMinutes(row.Tempo));
 
-    const bins = Array.from({ length: 10 }, (_, i) => i * 5);
+    const minTime = Math.min(...times);
+    const maxTime = Math.max(...times);
+
+    const binSize = 5;
+
+    const bins = Array.from(
+        { length: Math.ceil((maxTime - minTime) / binSize) + 1 },
+        (_, i) => minTime + i * binSize
+    );
+
     const counts = bins.map((bin, index) =>
-        times.filter(time => time >= bin && time < bins[index + 1]).length
+        times.filter(time => 
+            time >= bin && time < (bins[index + 1] || maxTime + binSize)
+        ).length
     );
 
     if (barChart) barChart.destroy();
@@ -77,7 +88,7 @@ function updateBarChart() {
     barChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: bins.map(bin => `${bin} - ${bin + 5} min`),
+            labels: bins.map(bin => `${bin} - ${bin + binSize} min`),
             datasets: [{
                 label: 'Participantes por Faixa de Tempo',
                 data: counts,
@@ -87,10 +98,25 @@ function updateBarChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true } }
+            scales: { 
+                y: { 
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Número de Participantes'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Tempo (Minutos)'
+                    }
+                }
+            }
         }
     });
 }
+
 
 function getCategoryData() {
     const categorySelect = document.getElementById('categorySelect');
