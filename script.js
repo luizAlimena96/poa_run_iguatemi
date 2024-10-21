@@ -67,8 +67,8 @@ function updateBarChart() {
     const { categoryData } = getCategoryData();
     const times = categoryData.map(row => convertTimeToMinutes(row.Tempo));
 
-    const minTime = Math.min(...times);
-    const maxTime = Math.max(...times);
+    const minTime = Math.floor(Math.min(...times) / 5) * 5;
+    const maxTime = Math.ceil(Math.max(...times) / 5) * 5;
 
     const binSize = 5;
 
