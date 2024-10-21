@@ -4,6 +4,8 @@ Aplicação web para visualizar o desempenho dos participantes do Iguatemi Run e
 
 Desenvolvido com HTML, CSS, JavaScript e Chart.js. Os dados são carregados via JSON.
 
+![image](https://github.com/user-attachments/assets/42fb25dc-13d9-4816-8d94-9c10c0e71bf6)
+
 ## **Estrutura**  
 
 /projeto
@@ -14,4 +16,4 @@ Desenvolvido com HTML, CSS, JavaScript e Chart.js. Os dados são carregados via 
 ├── iguatemi_run_data.json
 └── README.md
 
-![image](https://github.com/user-attachments/assets/42fb25dc-13d9-4816-8d94-9c10c0e71bf6)
+
