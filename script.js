@@ -59,11 +59,38 @@ function updateChart() {
             scales: {
                 x: {
                     type: 'linear',
-                    title: { display: true, text: 'Tempo Total (Minutos)' }
+                    title: { display: true, text: 'Tempo Total (Minutos)' },
+                    grid: {
+                        color: 'rgba(200, 200, 200, 0.2)',
+                        lineWidth: 1,
+                    },
+                    ticks: {
+                        stepSize: 5
+                    }
                 },
                 y: {
                     beginAtZero: true,
-                    title: { display: true, text: 'Pace (min/km)' }
+                    title: { display: true, text: 'Pace (min/km)' },
+                    grid: {
+                        color: 'rgba(200, 200, 200, 0.2)',
+                        lineWidth: 1,
+                    },
+                    ticks: {
+                        stepSize: 0.5
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Tempo: ${context.raw.x} min, Pace: ${context.raw.y.toFixed(2)} min/km`;
+                        }
+                    }
                 }
             }
         }
