@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #f0f4f8, #c8d8e4);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+    text-align: center;
+}
+
+label {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #444;
+}
+
+select, input, button {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 400px;
+    font-size: 1rem;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+#info {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+#chart-container {
+    width: 100%;
+    max-width: 900px; /* Aumentar o tamanho máximo para desktops */
+    margin-top: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+canvas {
+    width: 100% !important;
+    height: 500px !important; /* Aumentar altura para melhor visualização */
+}
+
+/* Ajuste para telas menores */
+@media (max-width: 768px) {
+    canvas {
+        height: 400px !important; /* Altura reduzida para telas menores */
+    }
+
+    #chart-container {
+        padding: 15px;
+    }
+}
