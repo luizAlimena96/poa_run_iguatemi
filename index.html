@@ -6,32 +6,27 @@
     <title>Desempenho - Iguatemi Run</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
 </head>
-
 <body>
-    <h1>Curva de Dispersão - Iguatemi Day Run</h1>
+    <h1>Curva de Desempenho - Iguatemi Day Run</h1>
 
     <label for="categorySelect">Escolha uma categoria:</label>
-    <select id="categorySelect" onchange="updateChart()">
+    <select id="categorySelect" onchange="createCharts()">
         <option value="3km_geral" data-distance="3">3 km - Geral</option>
         <option value="5km_geral" data-distance="5">5 km - Geral</option>
         <option value="10km_geral" data-distance="10">10 km - Geral</option>
     </select>
 
-    <label for="participantNumber">Digite seu número de participante:</label>
-    <input type="number" id="participantNumber" placeholder="Número">
-
-    <button onclick="highlightParticipant()">Ver Desempenho</button>
-
-    <div id="info"></div>
-
     <div id="chart-container">
+        <h2>Scatter Chart</h2>
         <canvas id="scatterChart"></canvas>
     </div>
-    
+
     <div id="chart-container">
+        <h2>Bar Chart</h2>
         <canvas id="barChart"></canvas>
     </div>
+
+    <script src="./script.js"></script>
 </body>
 </html>

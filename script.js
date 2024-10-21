@@ -1,5 +1,6 @@
 let chart;
 let barChart;
+let allData;
 
 async function fetchData() {
     try {
