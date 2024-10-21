@@ -67,13 +67,12 @@ function updateBarChart() {
     const { categoryData } = getCategoryData();
     const times = categoryData.map(row => convertTimeToMinutes(row.Tempo));
 
-    const minTime = Math.floor(Math.min(...times) / 5) * 5;
-    const maxTime = Math.ceil(Math.max(...times) / 5) * 5;
-
     const binSize = 5;
+    const minTime = Math.floor(Math.min(...times) / binSize) * binSize;
+    const maxTime = Math.ceil(Math.max(...times) / binSize) * binSize;
 
     const bins = Array.from(
-        { length: Math.ceil((maxTime - minTime) / binSize) + 1 },
+        { length: Math.ceil((maxTime - minTime) / binSize) },
         (_, i) => minTime + i * binSize
     );
 
@@ -92,7 +91,9 @@ function updateBarChart() {
             datasets: [{
                 label: 'Participantes por Faixa de Tempo',
                 data: counts,
-                backgroundColor: 'rgba(0, 200, 150, 0.5)'
+                backgroundColor: 'rgba(0, 200, 150, 0.5)',
+                borderColor: 'rgba(0, 150, 100, 1)',
+                borderWidth: 1
             }]
         },
         options: {
@@ -104,13 +105,25 @@ function updateBarChart() {
                     title: {
                         display: true,
                         text: 'Número de Participantes'
+                    },
+                    ticks: {
+                        stepSize: 1
                     }
                 },
                 x: {
                     title: {
                         display: true,
                         text: 'Tempo (Minutos)'
+                    },
+                    ticks: {
+                        autoSkip: false,
                     }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
                 }
             }
         }
